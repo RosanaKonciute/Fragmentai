@@ -28,11 +28,11 @@ namespace XESApdorojimas
         public string Row { get; set; }
 
         /// <summary>
-        /// abab cycling
+        /// Column event cycling, e.g. aaaa
         /// </summary>
         public int CycleCount { get; set; }
         /// <summary>
-        /// Column event cycling, e.g. aaaa
+        /// abab cycling
         /// </summary>
         public int ColumnCycling { get; set; }
         /// <summary>
