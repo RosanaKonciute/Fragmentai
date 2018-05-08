@@ -253,7 +253,7 @@ namespace XESApdorojimas
                     }
                 }
 
-
+             
                 foreach (var egzempliorius in zurnalas.Traces)
                 {
                     foreach (var unikalusVardas in unikalusVardai)
