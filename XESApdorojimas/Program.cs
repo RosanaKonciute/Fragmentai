@@ -280,7 +280,7 @@ namespace XESApdorojimas
                             int antroidx = -1;
                             for (var i = 0; i < egzempliorius.Events.Count; i++)
                             {
-                                if (egzempliorius.Events[i].Name == unikalusVardas)
+                                if (egzempliorius.Events[i].Name == unikalusVardas2)
                                 {
                                     antras = egzempliorius.Events[i];
                                     antroidx = i;
@@ -299,7 +299,7 @@ namespace XESApdorojimas
 
                 foreach (var matrixElement in priklausomybiuMatrica.Elements)
                 {
-                    Console.WriteLine("{0}\t{1}\t{{{2},{3},{4}}}",matrixElement.Column,matrixElement.Row,matrixElement.CycleCount,matrixElement.ColumnCycling, matrixElement.Follows);
+                    Console.WriteLine("{0}\t{1}\t{{{2},{3}}}",matrixElement.Column,matrixElement.Row,matrixElement.CycleCount,matrixElement.ColumnCycling);
                     //Console.WriteLine("{0}\t{1}\t{2}", matrixElement.Column, matrixElement.Row, matrixElement.EventuallyFollows);
                 }
 
@@ -412,4 +412,3 @@ namespace XESApdorojimas
 
 }
 
-//veikia?
