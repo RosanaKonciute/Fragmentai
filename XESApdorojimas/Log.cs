@@ -9,7 +9,7 @@ namespace XESApdorojimas
     class Log
     {
         public string FileName { get; set; }
-        public List<Trace> Traces { get; private set; } = new List<Trace>(); 
+        public List<Trace> Traces { get; private set; } = new List<Trace>();
     }
 
     class Trace
