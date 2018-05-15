@@ -99,14 +99,15 @@ namespace XESApdorojimas
                 List<string> unikalusVardai = new List<string>();
                 for (var j = 0; j < a; j++)
                 {
-                    if (!unikalusVardai.Contains(out0[j].Item2)) {
+                    if (!unikalusVardai.Contains(out0[j].Item2))
+                    {
                         unikalusVardai.Add(out0[j].Item2);
                     }
                 }
                 Console.WriteLine("Unikalus ivykiu vardai zurnale \n");
-                for (var j=0;j<unikalusVardai.Count();j++)
+                for (var j = 0; j < unikalusVardai.Count(); j++)
                 {
-                Console.WriteLine(unikalusVardai[j]+"\n");
+                    Console.WriteLine(unikalusVardai[j] + "\n");
                 }
                 Console.WriteLine("Is viso yra " + unikalusVardai.Count() + " unikaliu vardu \n");
 
@@ -126,51 +127,7 @@ namespace XESApdorojimas
                 }
                 Console.WriteLine("Is viso yra " + unikalusEgzemplioriai.Count() + " unikaliu egzemplioriu \n");
 
-                /*
-                // visu veiklu vardu ciklai
-                for (var j = 0; j < unikalusVardai.Count(); j++)
-                {
-                    Console.WriteLine(unikalusVardai[j] + " Veiklos ciklo atvejai zurnale: ");
-                    var kintamasis = unikalusVardai[j];
-                    double ciklas = 0;
-                    for (var i = 0; i < a; i++)
-                    {
-                        if (out0[i].Item1 == out0[i + 1].Item1 && out0[i].Item2 == out0[i + 1].Item2 && out0[i].Item2.Contains(kintamasis))
-                        {
-                            ciklas++;
-                            
-                            Console.WriteLine("{0},{1}", out0[i], out0[i + 1] + "\n");
-                        }
-                    }
-                    Console.WriteLine("Veiklos " + unikalusVardai[j] + " ciklas ivyko  " + ciklas + "  kartus" + "\n");
-                    double CikloSantykis = ciklas / IsVisoElementu;
-                    Console.WriteLine("Procentaliai " + unikalusVardai[j] + " veiklos ciklas  " + CikloSantykis + "\n");
-                }
-               
-                */
 
-
-                /*
-                 // tiesiogine seka 
-                 for (var j = 0; j < unikalusVardai.Count(); j++) {
-                     for (var k = 0; k < unikalusVardai.Count(); k++) {
-                     Console.WriteLine(unikalusVardai[j] + " ir " + unikalusVardai[k]+ " tiesiogines sekos atvejai \n");
-                     double tiesioginis = 0;
-                     for (var i = 0; i < a; i++) {
-
-                         if (out0[i].Item1 == out0[i + 1].Item1 && out0[i].Item2.Contains(unikalusVardai[j]) && out0[i + 1].Item2.Contains(unikalusVardai[k])) {
-                             tiesioginis++;
-
-                             Console.WriteLine("{0},{1}", out0[i], out0[i + 1] + "\n");
-                         }
-                     }
-                     Console.WriteLine("Po veiklos " + unikalusVardai[j] + " is karto seke veikla " + unikalusVardai[k] + " " + tiesioginis + "  kartus" + "\n");
-                     double TiesioginesSantykis = tiesioginis / IsVisoElementu;
-                     Console.WriteLine("Procentaliai po veiklos " + unikalusVardai[j] + " is karto seke  " + unikalusVardai[k] + "   " + TiesioginesSantykis + "\n");
-                 }
-                     }
-                     
-                 */
 
 
                 //TITO PASIULYMAS
@@ -179,7 +136,7 @@ namespace XESApdorojimas
                 //tuscia matrica uzpildome
                 foreach (var ivykioPavadinimas in unikalusVardai)
                 {
-                    foreach(var ivykioPavadinimas2 in unikalusVardai)
+                    foreach (var ivykioPavadinimas2 in unikalusVardai)
                     {
                         priklausomybiuMatrica.GetElement(ivykioPavadinimas, ivykioPavadinimas2);
                     }
@@ -191,69 +148,23 @@ namespace XESApdorojimas
                 var tmp = out0[0];
                 var zurnalas = new Log();
                 var currEgz = new Trace() { Id = tmp.Item1 };
+                currEgz.Events.Add(new Event() { Name = out0[0].Item2 });
                 zurnalas.Traces.Add(currEgz);
                 for (var i = 1; i < out0.Count; i++)
                 {
                     var tmp2 = out0[i];
-                    if(tmp2.Item1 != currEgz.Id)
+                    if (tmp2.Item1 != currEgz.Id)
                     {
                         currEgz = new Trace() { Id = tmp2.Item1 };
                         zurnalas.Traces.Add(currEgz);
                     }
-                    currEgz.Events.Add(new Event(){ Name= out0[i].Item2 });
+                    currEgz.Events.Add(new Event() { Name = out0[i].Item2 });
                 }
 
+                SuskaiciuokColumnCycling(priklausomybiuMatrica, zurnalas);
+                SuskaiciuokCycleIrDirectlyFollows(unikalusVardai, priklausomybiuMatrica, zurnalas);
+                SuskaiciuokKoreliacijas(unikalusVardai, priklausomybiuMatrica, zurnalas);
 
-
-                //ieskome ciklu
-                foreach (var egzempliorius in zurnalas.Traces)
-                {
-                    for (var i = 0; i < egzempliorius.Events.Count - 3; i++)
-                    {
-                        var pirmasIvykis = egzempliorius.Events[i].Name;
-                        var antrasivykis = egzempliorius.Events[i + 1].Name;
-                        var treciasIvykis = egzempliorius.Events[i + 2].Name;
-                        var ketvirtasIvykis = egzempliorius.Events[i + 3].Name;
-
-
-                        //cikliskumas abab
-                        if (pirmasIvykis == treciasIvykis && antrasivykis == ketvirtasIvykis)
-                        {
-                            priklausomybiuMatrica.GetElement(pirmasIvykis, antrasivykis).ColumnCycling++;
-                        }
-
-                        //cikliskumas aa
-                        if (pirmasIvykis == antrasivykis)
-                        {
-                            foreach(var unikalusVardas in unikalusVardai)
-                            {
-                                priklausomybiuMatrica.GetElement(pirmasIvykis, unikalusVardas).CycleCount++;
-                            }
-                        }
-                    }
-                }
-
-                foreach (var egzempliorius in zurnalas.Traces)
-                {
-                    for (var i = 0; i < egzempliorius.Events.Count -1; i++)
-                    {
-                        var pirmasIvykis = egzempliorius.Events[i].Name;
-                        var antrasivykis = egzempliorius.Events[i + 1].Name;
-
-                        //cikliskumas aa
-                        if (pirmasIvykis == antrasivykis)
-                        {
-                            foreach (var unikalusVardas in unikalusVardai)
-                            {
-                                priklausomybiuMatrica.GetElement(pirmasIvykis, unikalusVardas).CycleCount++;
-                            }
-                        }
-                        //directly follows
-                        priklausomybiuMatrica.GetElement(pirmasIvykis, antrasivykis).Follows++;
-                    }
-                }
-
-             
                 foreach (var egzempliorius in zurnalas.Traces)
                 {
                     foreach (var unikalusVardas in unikalusVardai)
@@ -292,93 +203,73 @@ namespace XESApdorojimas
                             }
 
                         }
-                       
+
                     }
 
                 }
 
-                foreach (var matrixElement in priklausomybiuMatrica.Elements)
-                {
-                    Console.WriteLine("{0}\t{1}\t{{{2},{3}}}",matrixElement.Column,matrixElement.Row,matrixElement.CycleCount,matrixElement.ColumnCycling);
-                    //Console.WriteLine("{0}\t{1}\t{2}", matrixElement.Column, matrixElement.Row, matrixElement.EventuallyFollows);
-                }
 
-                /*
-                //ciklas dvieju veiklu
-                for (var j = 0; j < unikalusVardai.Count()-1; j++)
+
+
+                using (System.IO.StreamWriter file =
+                new System.IO.StreamWriter(Environment.CurrentDirectory+@"\InputTinklui.csv", false))
                 {
-                    Console.WriteLine(unikalusVardai[j] + " ir " + unikalusVardai[j + 1] + " dvieju veiklu ciklo atvejai \n");
-                    double DviejuCiklas = 0;
-                    for (var i = 0; i < a-4; i++)
+                    file.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",
+                                 "Veikla1", "Veikla2",
+                               "r1", "r2", "r3", "r4", "r5", "r21", "r22", "r23", "r24", "r25");
+                    int EgzemplioriuSkaiciusLaikinas = unikalusEgzemplioriai.Count();
+                    double EgzemplioriuSkaicius = Convert.ToDouble(EgzemplioriuSkaiciusLaikinas);
+                    List<string> done = new List<string>();
+                    foreach (var unikalusVardas in unikalusVardai)
                     {
-                        if (out0[i].Item1 == out0[i + 1].Item1 && out0[i + 1].Item1 == out0[i + 2].Item1 && out0[i + 2].Item1 == out0[i + 3].Item1 &&
-                            out0[i].Item2.Contains(unikalusVardai[j]) && out0[i + 1].Item2.Contains(unikalusVardai[j + 1]) &&
-                            out0[i + 2].Item2.Contains(unikalusVardai[j]) && out0[i + 3].Item2.Contains(unikalusVardai[j + 1]))
+                        foreach (var unikalusVardasPora in unikalusVardai)
                         {
-                            DviejuCiklas++;
-
-                            Console.WriteLine("{0},{1},{2},{3}", out0[i], out0[i + 1], out0[i + 2], out0[i + 3] + "\n");
-                        }
-                    }
-                    Console.WriteLine("Veiklu " + unikalusVardai[j] + " ir " + unikalusVardai[j + 1] + " ciklas ivyko " + DviejuCiklas + "  kartus" + "\n");
-                    double TiesioginesSantykis = DviejuCiklas / IsVisoElementu;
-                    Console.WriteLine("Procentaliai siu veiklu ciklas ivyko " + TiesioginesSantykis + "\n");
-                }
-                */
-
-                /*
-                 // koreliacija
-                 for (var x = 0; x < unikalusEgzemplioriai.Count() - 1; x++)
-                 {
-                     for (var k = 0; k < unikalusVardai.Count()- 1; k++)
-                     {
-                         double koreliacija = 0;
-                         for (var j = 0; j < unikalusVardai.Count()-1; j++)
-                         {
-                             //Console.WriteLine(unikalusVardai[j] + " ir " + unikalusVardai[k] + " koreliacijos atvejai \n");
-                             for (var i = 0; i < a; i++)
-                             {
-                                     //if (out0[i].Item1 == out0[i+1].Item1 && out0[i].Item1.Equals(unikalusEgzemplioriai[x]) && out0[i+1].Item1.Equals(unikalusEgzemplioriai[x])  )
-
-                                       if (out0[i].Item1 == unikalusEgzemplioriai[x] && out0[i].Item2 == unikalusVardai[j]
-                                         && out0[i+1].Item1 == unikalusEgzemplioriai[x]
-                                         && out0[i+1].Item2 != unikalusVardai[j])
-                                       {
-                                         koreliacija++;
-                                       }
-                                 //double KoreliacijosSantykis = koreliacija / IsVisoElementu;
-                             }
-                             Console.WriteLine("Esant veiklai" + unikalusVardai[j] + " veikla " + unikalusVardai[k] + " nepasirode " + koreliacija + "  egzemplioriuose" + "\n");
-                         }
-                         //Console.WriteLine("Procentaliai po veiklos " + unikalusVardai[j] + " is karto seke  " + unikalusVardai[k] + "   " + KoreliacijosSantykis + "\n");
-                     }
-                 }
-                 */
-
-                /*
-                // netiesiogine seka
-                for (var j = 0; j < unikalusVardai.Count() - 1; j++)
-                {
-                    for (var k = 0; k < unikalusVardai.Count() - 1; k++)
-                    {
-                        Console.WriteLine(unikalusVardai[j] + " ir " + unikalusVardai[k] + " netiesiogines sekos atvejai \n");
-                        double netiesioginis = 0;
-                        for (var i = 0; i < a; i++)
-                        {
-
-                            if (out0[i].Item1 == out0[i + 1].Item1 && out0[i].Item2.Contains(unikalusVardai[j]) && !out0[i + 1].Item2.Contains(unikalusVardai[k]))
+                            if (unikalusVardas == unikalusVardasPora)
                             {
-                                netiesioginis++;
-
-                                Console.WriteLine("{0},{1}", out0[i], out0[i + 1] + "\n");
+                                continue;
                             }
+                            var pair = String.Format("{0}{1}", unikalusVardas, unikalusVardasPora);
+                            var pair2 = String.Format("{0}{1}", unikalusVardasPora, unikalusVardas);
+                            if (!done.Contains(pair) && !done.Contains(pair2))
+                            {
+                                var matrixElement = priklausomybiuMatrica.GetElement(unikalusVardas, unikalusVardasPora);
+                                var matrixElementInverse = priklausomybiuMatrica.GetElement(unikalusVardasPora, unikalusVardas);
+                                file.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",
+                                     matrixElement.Column,
+                                     matrixElement.Row,
+                                     matrixElement.Follows / EgzemplioriuSkaicius,
+                                     matrixElement.EventuallyFollows / EgzemplioriuSkaicius,
+                                     matrixElement.CycleCount / EgzemplioriuSkaicius,
+                                     matrixElement.ColumnCycling / EgzemplioriuSkaicius,
+                                     matrixElement.Correlation / EgzemplioriuSkaicius,
+                                     matrixElementInverse.Follows / EgzemplioriuSkaicius,
+                                     matrixElementInverse.EventuallyFollows / EgzemplioriuSkaicius,
+                                     matrixElementInverse.CycleCount / EgzemplioriuSkaicius,
+                                     matrixElementInverse.ColumnCycling / EgzemplioriuSkaicius,
+                                     matrixElementInverse.Correlation / EgzemplioriuSkaicius);
+
+                                done.Add(pair);
+                                done.Add(pair2);
+                            }
+                            //file.WriteLine("\r\n\r\n");
                         }
-                        Console.WriteLine("Po veiklos " + unikalusVardai[j] + " ne is karto seke veikla " + unikalusVardai[k] + " " + netiesioginis + "  kartus" + "\n");
-                        double NeTiesioginesSantykis = netiesioginis / IsVisoElementu;
-                        Console.WriteLine("Procentaliai po veiklos " + unikalusVardai[j] + " ne is karto seke  " + unikalusVardai[k] + "   " + NeTiesioginesSantykis + "\n");
                     }
                 }
-                */
+
+                using (StreamWriter sw = new StreamWriter(Environment.CurrentDirectory + @"\tracelist.txt"))
+                {
+                    foreach (var egz in zurnalas.Traces)
+                    {
+                        sw.Write(egz.Id + " ");
+                        foreach (var ev in egz.Events)
+                        {
+                            sw.Write(ev.Name);
+                        }
+                        sw.Write("\r\n");
+                    }
+                }
+
+                Console.WriteLine("\n");
 
                 Console.ReadLine();
 
@@ -387,7 +278,96 @@ namespace XESApdorojimas
 
         }
 
+        private static void SuskaiciuokKoreliacijas(List<string> unikalusVardai, Matrix priklausomybiuMatrica, Log zurnalas)
+        {
+            //isgauname koreliacijas
+            foreach (var egzempliorius in zurnalas.Traces)
+            {
+                //surenkame rastus egzemplioriaus ivykius
+                List<string> egzemplioriausIvykiai = new List<string>();
+                for (var i = 0; i < egzempliorius.Events.Count; i++)
+                {
+                    var ivykis = egzempliorius.Events[i];
+                    if (egzemplioriausIvykiai.Contains(ivykis.Name))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        egzemplioriausIvykiai.Add(ivykis.Name);
+                    }
+                }
 
+                //atrenkame ivykius, kuriu nebuvo egzemplioriuje, nors buvo rasti zurnale
+                List<string> nerastiIvykiai = new List<string>();
+                foreach (var unikalusVardas in unikalusVardai)
+                {
+                    if (egzemplioriausIvykiai.Contains(unikalusVardas))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        nerastiIvykiai.Add(unikalusVardas);
+                    }
+                }
+
+                //matricoje padidiname Correlation dydi {rastasIvykis,nerastasIvykis} porai
+                foreach (var nerastasIvykis in nerastiIvykiai)
+                {
+                    foreach (var egzemplioriausIvykis in egzemplioriausIvykiai)
+                    {
+                        priklausomybiuMatrica.GetElement(egzemplioriausIvykis, nerastasIvykis).Correlation++;
+                    }
+                }
+            }
+        }
+
+        private static void SuskaiciuokCycleIrDirectlyFollows(List<string> unikalusVardai, Matrix priklausomybiuMatrica, Log zurnalas)
+        {
+            foreach (var egzempliorius in zurnalas.Traces)
+            {
+                for (var i = 0; i < egzempliorius.Events.Count - 1; i++)
+                {
+                    var pirmasIvykis = egzempliorius.Events[i].Name;
+                    var antrasivykis = egzempliorius.Events[i + 1].Name;
+
+                    //cikliskumas aa
+                    if (pirmasIvykis == antrasivykis)
+                    {
+                        foreach (var unikalusVardas in unikalusVardai)
+                        {
+                            priklausomybiuMatrica.GetElement(pirmasIvykis, unikalusVardas).CycleCount++;
+                        }
+                    }
+                    //directly follows
+                    priklausomybiuMatrica.GetElement(pirmasIvykis, antrasivykis).Follows++;
+                }
+            }
+        }
+
+        private static void SuskaiciuokColumnCycling(Matrix priklausomybiuMatrica, Log zurnalas)
+        {
+            //ieskome ciklu
+            foreach (var egzempliorius in zurnalas.Traces)
+            {
+                for (var i = 0; i < egzempliorius.Events.Count - 3; i++)
+                {
+                    var pirmasIvykis = egzempliorius.Events[i].Name;
+                    var antrasivykis = egzempliorius.Events[i + 1].Name;
+                    var treciasIvykis = egzempliorius.Events[i + 2].Name;
+                    var ketvirtasIvykis = egzempliorius.Events[i + 3].Name;
+
+
+                    //cikliskumas abab
+                    if (pirmasIvykis == treciasIvykis && antrasivykis == ketvirtasIvykis)
+                    {
+                        priklausomybiuMatrica.GetElement(pirmasIvykis, antrasivykis).ColumnCycling++;
+                    }
+
+                }
+            }
+        }
 
         private static string IsgaukElementoPavadinima(XElement elementas)
         {
