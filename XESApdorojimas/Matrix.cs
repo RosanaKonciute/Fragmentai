@@ -13,12 +13,12 @@ namespace XESApdorojimas
         public MatrixElement GetElement(string column, string row)
         {
             var existing = Elements.Where(x => x.Column == column && x.Row == row).FirstOrDefault();
-            if(existing == null)
+            if (existing == null)
             {
                 existing = new MatrixElement() { Row = row, Column = column };
                 Elements.Add(existing);
             }
-            return existing;           
+            return existing;
         }
     }
 
@@ -50,5 +50,5 @@ namespace XESApdorojimas
 
     }
 
-    
+
 }
