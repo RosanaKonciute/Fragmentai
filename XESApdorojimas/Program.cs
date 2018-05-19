@@ -164,55 +164,19 @@ namespace XESApdorojimas
                 SuskaiciuokColumnCycling(priklausomybiuMatrica, zurnalas);
                 SuskaiciuokCycleIrDirectlyFollows(unikalusVardai, priklausomybiuMatrica, zurnalas);
                 SuskaiciuokKoreliacijas(unikalusVardai, priklausomybiuMatrica, zurnalas);
+                SuskaiciuokEventuallyFollows(unikalusVardai, priklausomybiuMatrica, zurnalas);
 
-                foreach (var egzempliorius in zurnalas.Traces)
-                {
-                    foreach (var unikalusVardas in unikalusVardai)
-                    {
-                        Event pirmas = null;
-                        int pirmoidx = -1;
-                        for (var i = 0; i < egzempliorius.Events.Count; i++)
-                        {
-                            if (egzempliorius.Events[i].Name == unikalusVardas)
-                            {
-                                pirmas = egzempliorius.Events[i];
-                                pirmoidx = i;
-                                break;
-                            }
-                        }
-                        if (pirmas == null)
-                        {
-                            continue;
-                        }
-
-                        foreach (var unikalusVardas2 in unikalusVardai)
-                        {
-                            Event antras = null;
-                            int antroidx = -1;
-                            for (var i = 0; i < egzempliorius.Events.Count; i++)
-                            {
-                                if (egzempliorius.Events[i].Name == unikalusVardas2)
-                                {
-                                    antras = egzempliorius.Events[i];
-                                    antroidx = i;
-                                    if (antroidx - pirmoidx > 1)
-                                    {
-                                        priklausomybiuMatrica.GetElement(unikalusVardas, unikalusVardas2).EventuallyFollows++;
-                                    }
-                                }
-                            }
-
-                        }
-
-                    }
-
-                }
+                //double followsSuma = priklausomybiuMatrica.Elements.Sum(x => x.Follows);
+                //double eventuallyFollowsSuma = priklausomybiuMatrica.Elements.Sum(x => x.EventuallyFollows);
+                //double cycleCountSuma = priklausomybiuMatrica.Elements.Sum(x => x.CycleCount);
+                //double ColumnCycleSuma = priklausomybiuMatrica.Elements.Sum(x => x.ColumnCycling);
+                //double CorrelationSuma = priklausomybiuMatrica.Elements.Sum(x => x.Correlation);
 
 
-
+                //Console.WriteLine("{0},{1},{2},{3},{4}", followsSuma, eventuallyFollowsSuma, cycleCountSuma, ColumnCycleSuma, CorrelationSuma);
 
                 using (System.IO.StreamWriter file =
-                new System.IO.StreamWriter(Environment.CurrentDirectory+@"\InputTinklui.csv", false))
+                new System.IO.StreamWriter(Environment.CurrentDirectory + @"\InputTinklui.csv", false))
                 {
                     file.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",
                                  "Veikla1", "Veikla2",
@@ -220,10 +184,13 @@ namespace XESApdorojimas
                     int EgzemplioriuSkaiciusLaikinas = unikalusEgzemplioriai.Count();
                     double EgzemplioriuSkaicius = Convert.ToDouble(EgzemplioriuSkaiciusLaikinas);
                     List<string> done = new List<string>();
-                    foreach (var unikalusVardas in unikalusVardai)
+
+                    for (var i = 0; i < unikalusVardai.Count; i++)
                     {
-                        foreach (var unikalusVardasPora in unikalusVardai)
+                        var unikalusVardas = unikalusVardai[i];
+                        for (var j = i; j < unikalusVardai.Count; j++)
                         {
+                            var unikalusVardasPora = unikalusVardai[j];
                             if (unikalusVardas == unikalusVardasPora)
                             {
                                 continue;
@@ -234,19 +201,61 @@ namespace XESApdorojimas
                             {
                                 var matrixElement = priklausomybiuMatrica.GetElement(unikalusVardas, unikalusVardasPora);
                                 var matrixElementInverse = priklausomybiuMatrica.GetElement(unikalusVardasPora, unikalusVardas);
+
+
+                                double followsSuma = matrixElement.Follows + matrixElementInverse.Follows;
+                                double eventuallyFollowsSuma = matrixElement.EventuallyFollows + matrixElementInverse.EventuallyFollows;
+                                double cycleCountSuma = matrixElement.CycleCount + matrixElementInverse.CycleCount;
+                                double ColumnCycleSuma = matrixElement.ColumnCycling + matrixElementInverse.ColumnCycling;
+                                double CorrelationSuma = matrixElement.OccuredRow + matrixElementInverse.OccuredColumn;
+                               
+
+
+
+                                double r1 = Convert.ToDouble(matrixElement.Follows);
+                                double r2 = Convert.ToDouble(matrixElement.EventuallyFollows);
+                                double r3 = Convert.ToDouble(matrixElement.CycleCount);
+                                double r4 = Convert.ToDouble(matrixElement.ColumnCycling);
+                                double r5 = Convert.ToDouble(matrixElement.Correlation);
+                                double r21 = Convert.ToDouble(matrixElementInverse.Follows);
+                                double r22 = Convert.ToDouble(matrixElementInverse.EventuallyFollows);
+                                double r23 = Convert.ToDouble(matrixElementInverse.CycleCount);
+                                double r24 = Convert.ToDouble(matrixElementInverse.ColumnCycling);
+                                double r25 = Convert.ToDouble(matrixElementInverse.Correlation);
+
+
+
+                                //file.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",
+                                //     matrixElement.Column,
+                                //     matrixElement.Row,
+                                //     matrixElement.Follows / EgzemplioriuSkaicius,
+                                //     matrixElement.EventuallyFollows / EgzemplioriuSkaicius,
+                                //     matrixElement.CycleCount / EgzemplioriuSkaicius,
+                                //     matrixElement.ColumnCycling / EgzemplioriuSkaicius,
+                                //     matrixElement.Correlation / EgzemplioriuSkaicius,
+                                //     matrixElementInverse.Follows / EgzemplioriuSkaicius,
+                                //     matrixElementInverse.EventuallyFollows / EgzemplioriuSkaicius,
+                                //     matrixElementInverse.CycleCount / EgzemplioriuSkaicius,
+                                //     matrixElementInverse.ColumnCycling / EgzemplioriuSkaicius,
+                                //     matrixElementInverse.Correlation / EgzemplioriuSkaicius);
+
+
+                                var _r1 = r1 / followsSuma;
+                                var _r21 = r21 / followsSuma;
+
                                 file.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",
                                      matrixElement.Column,
                                      matrixElement.Row,
-                                     matrixElement.Follows / EgzemplioriuSkaicius,
-                                     matrixElement.EventuallyFollows / EgzemplioriuSkaicius,
-                                     matrixElement.CycleCount / EgzemplioriuSkaicius,
-                                     matrixElement.ColumnCycling / EgzemplioriuSkaicius,
-                                     matrixElement.Correlation / EgzemplioriuSkaicius,
-                                     matrixElementInverse.Follows / EgzemplioriuSkaicius,
-                                     matrixElementInverse.EventuallyFollows / EgzemplioriuSkaicius,
-                                     matrixElementInverse.CycleCount / EgzemplioriuSkaicius,
-                                     matrixElementInverse.ColumnCycling / EgzemplioriuSkaicius,
-                                     matrixElementInverse.Correlation / EgzemplioriuSkaicius);
+                                     r1 / followsSuma,
+                                     r2 / eventuallyFollowsSuma,
+                                     r3 / cycleCountSuma,
+                                     r4 / ColumnCycleSuma,
+                                     r5 / CorrelationSuma,
+                                     r21 / followsSuma,
+                                     r22 / eventuallyFollowsSuma,
+                                     r23 / cycleCountSuma,
+                                     r24 / ColumnCycleSuma,
+                                     r25 / CorrelationSuma);
 
                                 done.Add(pair);
                                 done.Add(pair2);
@@ -276,6 +285,56 @@ namespace XESApdorojimas
 
             }
 
+        }
+
+        private static void SuskaiciuokEventuallyFollows(List<string> unikalusVardai, Matrix priklausomybiuMatrica, Log zurnalas)
+        {
+            foreach (var egzempliorius in zurnalas.Traces)
+            {
+                foreach (var unikalusVardas in unikalusVardai)
+                {
+                    Event pirmas = null;
+                    int pirmoidx = -1;
+                    for (var i = 0; i < egzempliorius.Events.Count; i++)
+                    {
+                        if (egzempliorius.Events[i].Name == unikalusVardas)
+                        {
+                            pirmas = egzempliorius.Events[i];
+                            pirmoidx = i;
+                            break;
+                        }
+                    }
+                    if (pirmas == null)
+                    {
+                        continue;
+                    }
+
+                    foreach (var unikalusVardas2 in unikalusVardai)
+                    {
+                        if(unikalusVardas == unikalusVardas2)
+                        {
+                            continue;
+                        }
+                        Event antras = null;
+                        int antroidx = -1;
+                        for (var i = 0; i < egzempliorius.Events.Count; i++)
+                        {
+                            if (egzempliorius.Events[i].Name == unikalusVardas2)
+                            {
+                                antras = egzempliorius.Events[i];
+                                antroidx = i;
+                                if (antroidx - pirmoidx > 1)
+                                {
+                                    priklausomybiuMatrica.GetElement(unikalusVardas, unikalusVardas2).EventuallyFollows++;
+                                }
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
         }
 
         private static void SuskaiciuokKoreliacijas(List<string> unikalusVardai, Matrix priklausomybiuMatrica, Log zurnalas)
@@ -341,7 +400,10 @@ namespace XESApdorojimas
                         }
                     }
                     //directly follows
-                    priklausomybiuMatrica.GetElement(pirmasIvykis, antrasivykis).Follows++;
+                    if (pirmasIvykis != antrasivykis)
+                    {
+                        priklausomybiuMatrica.GetElement(pirmasIvykis, antrasivykis).Follows++;
+                    }
                 }
             }
         }

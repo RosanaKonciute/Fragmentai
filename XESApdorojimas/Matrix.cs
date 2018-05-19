@@ -27,6 +27,8 @@ namespace XESApdorojimas
         public string Column { get; set; }
         public string Row { get; set; }
 
+        public int OccuredColumn { get; set; }
+        public int OccuredRow { get; set; }
         /// <summary>
         /// Column event cycling, e.g. aaaa
         /// </summary>
@@ -44,7 +46,7 @@ namespace XESApdorojimas
         /// </summary>
         public int EventuallyFollows { get; set; }
         //pakeisti/prideti
-        public int r3 { get; set; }
+        public int Correlation { get; set; }
 
     }
 
