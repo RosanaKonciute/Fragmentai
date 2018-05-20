@@ -172,7 +172,6 @@ namespace XESApdorojimas
                 //double ColumnCycleSuma = priklausomybiuMatrica.Elements.Sum(x => x.ColumnCycling);
                 //double CorrelationSuma = priklausomybiuMatrica.Elements.Sum(x => x.Correlation);
 
-
                 //Console.WriteLine("{0},{1},{2},{3},{4}", followsSuma, eventuallyFollowsSuma, cycleCountSuma, ColumnCycleSuma, CorrelationSuma);
 
                 using (System.IO.StreamWriter file =
@@ -209,6 +208,10 @@ namespace XESApdorojimas
                                 double ColumnCycleSuma = matrixElement.ColumnCycling + matrixElementInverse.ColumnCycling;
                                 double CorrelationSuma = matrixElement.OccuredRow + matrixElementInverse.OccuredColumn;
 
+                                
+                                Console.WriteLine("{0}",matrixElement.OccuredColumn);
+                                Console.WriteLine("{0}", matrixElement.OccuredRow);
+
                                 double r1 = Convert.ToDouble(matrixElement.Follows);
                                 double r2 = Convert.ToDouble(matrixElement.EventuallyFollows);
                                 double r3 = Convert.ToDouble(matrixElement.CycleCount);
@@ -230,9 +233,7 @@ namespace XESApdorojimas
                                 double abr5 = r5 / r5Column / r5Row;
                                 double abr25 = r25 / r5Column / r5Row;
 
-                                Console.WriteLine("{0}{1}", abr5, abr25);
-
-
+                               
 
 
                                 //file.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",
@@ -387,6 +388,22 @@ namespace XESApdorojimas
                     foreach (var egzemplioriausIvykis in egzemplioriausIvykiai)
                     {
                         priklausomybiuMatrica.GetElement(egzemplioriausIvykis, nerastasIvykis).Correlation++;
+                    }
+                }
+
+                foreach (var uniklausVardas in unikalusVardai)
+                {
+                    foreach (var egzemplioriausIvykis in egzemplioriausIvykiai)
+                    {
+                        priklausomybiuMatrica.GetElement(egzemplioriausIvykis, uniklausVardas).OccuredColumn++;
+                    }
+                }
+
+                foreach (var nerastasIvykis in nerastiIvykiai)
+                {
+                    foreach (var uniklausVardas in unikalusVardai)
+                    {
+                        priklausomybiuMatrica.GetElement(uniklausVardas, nerastasIvykis).OccuredRow++;
                     }
                 }
             }
