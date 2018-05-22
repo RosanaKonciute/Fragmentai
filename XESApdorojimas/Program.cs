@@ -23,8 +23,7 @@ namespace XESApdorojimas
         //ISTRINTI COMMAND LINE ARGUMENTS IN PROJEKTO->RMB->PROPERTIES->DEBUG
         static void Main(string[] args)
         {
-
-
+            
             //drag-droppinami failai yra kaip argumentai programai
             foreach (var filename in args)
             {
@@ -179,7 +178,7 @@ namespace XESApdorojimas
                 {
                     file.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}",
                                  "Veikla1", "Veikla2",
-                               "r1", "r2", "r3", "r4", "r5", "r21", "r22", "r23", "r24", "r25","class");
+                               "r1", "r2", "r3", "r4", "r5", "r21", "r22", "r23", "r24", "r25", "class");
                     int EgzemplioriuSkaiciusLaikinas = unikalusEgzemplioriai.Count();
                     double EgzemplioriuSkaicius = Convert.ToDouble(EgzemplioriuSkaiciusLaikinas);
                     List<string> done = new List<string>();
@@ -228,62 +227,63 @@ namespace XESApdorojimas
                                 var _r1 = r1 / followsSuma;
                                 var _r21 = r21 / followsSuma;
 
-                                double r1DevidefollowSuma = r1 / followsSuma;
-                                double r2DevideeventuallyFollowsSuma = r2 / eventuallyFollowsSuma;
-                                double r3DevidecycleCountSuma = r3 / cycleCountSuma;
-                                double r4DevideColumnCycleSuma = r4 / ColumnCycleSuma;
-                                double r5 = matrixElement.OccuredColumn / EgzemplioriuSkaicius * R5 / matrixElement.OccuredColumn;
+                                double r1DivideFollowSuma = r1 / followsSuma;
+                                double r2DivideeventuallyFollowsSuma = r2 / eventuallyFollowsSuma;
+                                double r3DividecycleCountSuma = r3 / cycleCountSuma;
+                                double r4DivideColumnCycleSuma = r4 / ColumnCycleSuma;
+                                double r5 = R5 / EgzemplioriuSkaicius;
 
-                                double r21DevidefollowSuma = r21 / followsSuma;
-                                double r22DevideeventuallyFollowsSuma = r22 / eventuallyFollowsSuma;
-                                double r23DevidecycleCountSuma = r23 / cycleCountSuma;
-                                double r24DevideColumnCycleSuma = r24 / ColumnCycleSuma;
-                                double r25 = matrixElementInverse.OccuredColumn / EgzemplioriuSkaicius;
+                                double r21DivideFollowSuma = r21 / followsSuma;
+                                double r22DivideeventuallyFollowsSuma = r22 / eventuallyFollowsSuma;
+                                double r23DividecycleCountSuma = r23 / cycleCountSuma;
+                                double r24DivideColumnCycleSuma = r24 / ColumnCycleSuma;
+                                double r25 = R25 / EgzemplioriuSkaicius;
 
-                                //PatikrinkArDalmuosNulis(r1, r1DevidefollowSuma);
-                                //PatikrinkArDalmuosNulis(r2, r2DevideeventuallyFollowsSuma);
-                                //PatikrinkArDalmuosNulis(r3, r3DevidecycleCountSuma);
-                                //PatikrinkArDalmuosNulis(r4, r4DevideeventuallyFollowsSuma);
-                                //PatikrinkArDalmuosNulis(r5, r5DevideeventuallyFollowsSuma);
-                                //PatikrinkArDalmuosNulis(r21, r21DevidefollowSuma);
-                                //PatikrinkArDalmuosNulis(r22, r22DevideeventuallyFollowsSuma);
-                                //PatikrinkArDalmuosNulis(r23, r23DevidecycleCountSuma);
-                                //PatikrinkArDalmuosNulis(r24, r24DevideeventuallyFollowsSuma);
-                                //PatikrinkArDalmuosNulis(r25, r25DevideeventuallyFollowsSuma);
-
+                                //PatikrinkArDalmuosNulis(r2, r2DivideeventuallyFollowsSuma);
+                                //PatikrinkArDalmuosNulis(r3, r3DividecycleCountSuma);
+                                //PatikrinkArDalmuosNulis(r4, r4DivideeventuallyFollowsSuma);
+                                //PatikrinkArDalmuosNulis(r5, r5DivideeventuallyFollowsSuma);
+                                //PatikrinkArDalmuosNulis(r21, r21DivideFollowSuma);
+                                //PatikrinkArDalmuosNulis(r22, r22DivideeventuallyFollowsSuma);
+                                //PatikrinkArDalmuosNulis(r23, r23DividecycleCountSuma);
+                                //PatikrinkArDalmuosNulis(r24, r24DivideeventuallyFollowsSuma);
+                                //PatikrinkArDalmuosNulis(r25, r25DivideeventuallyFollowsSuma);
 
 
-                                if (r1 == 0)
-                                {
-                                    r1DevidefollowSuma = 0;
-                                }
+
+                                r1DivideFollowSuma = r1DivideFollowSuma.MakeZeroIfNan();
+
+                                //if (r1 == 0)
+                                //{
+                                //    r1DivideFollowSuma = 0;
+                                //}
                                 if (r21 == 0)
                                 {
-                                    r21DevidefollowSuma = 0;
+                                    r21DivideFollowSuma = 0;
                                 }
                                 if (r2 == 0)
                                 {
-                                    r2DevideeventuallyFollowsSuma = 0;
+                                    r2DivideeventuallyFollowsSuma = 0;
                                 }
                                 if (r22 == 0)
                                 {
-                                    r22DevideeventuallyFollowsSuma = 0;
+                                    r22DivideeventuallyFollowsSuma = 0;
                                 }
                                 if (r3 == 0)
                                 {
-                                    r3DevidecycleCountSuma = 0;
+                                    r3DividecycleCountSuma = 0;
                                 }
                                 if (r23 == 0)
                                 {
-                                    r23DevidecycleCountSuma = 0;
+                                    r23DividecycleCountSuma = 0;
                                 }
                                 if (r4 == 0)
                                 {
-                                    r4DevideColumnCycleSuma = 0;
+                                    r4DivideColumnCycleSuma = 0;
                                 }
                                 if (r24 == 0)
                                 {
-                                    r24DevideColumnCycleSuma = 0;
+                                    r24DivideColumnCycleSuma = 0;
                                 }
                                 if (r5 == 0)
                                 {
@@ -295,68 +295,74 @@ namespace XESApdorojimas
                                 }
 
 
-                                double tau = 0.2;
+                                double tau = 0.05;
                                 string klase = " ";
-                                if ((r1DevidefollowSuma + r21DevidefollowSuma) > (1 - tau) && (r5 + r25) < (0+tau))
+                                List<string> klases = new List<string>();
+                                if ((r1DivideFollowSuma + r21DivideFollowSuma) > (1 - tau)
+                                    && r1DivideFollowSuma > tau && r21DivideFollowSuma > tau
+                                    && (r5 + r25) < (0 + tau))
                                 {
-                                    klase = "AND";
+                                    klases.Add("AND");
                                 }
-                                if ((r1DevidefollowSuma + r21DevidefollowSuma) < (0 + tau) && (r5 + r25) > (1 - tau))
-                                {
-                                    klase = "OR";
-                                }
-                                if ( (0 + tau) < (r1DevidefollowSuma + r21DevidefollowSuma) && (r1DevidefollowSuma + r21DevidefollowSuma) < (1 - tau) && (0+tau)<(r5 + r25) && (r5 + r25) < (1 - tau))
+                                if ((r1DivideFollowSuma + r21DivideFollowSuma) < (0 + tau) && (r5 + r25) > (1 - tau))
                                 {
                                     klase = "XOR";
                                 }
-                                if (r3DevidecycleCountSuma > (0 + tau))
+                                if ((0 + tau) < (r1DivideFollowSuma + r21DivideFollowSuma) && (r1DivideFollowSuma + r21DivideFollowSuma) < (1 - tau) && (0 + tau) < (r5 + r25) && (r5 + r25) < (1 - tau))
+                                {
+                                    klase = "OR";
+                                }
+                                if (r3DividecycleCountSuma > (0 + tau))
                                 {
                                     klase = "w_i_ciklas";
                                 }
-                                if (r23DevidecycleCountSuma > (0 + tau))
+                                if (r23DividecycleCountSuma > (0 + tau))
                                 {
                                     klase = "w_j_ciklas";
                                 }
-                                if (r4DevideColumnCycleSuma > (0 + tau))
+                                if (r4DivideColumnCycleSuma > (0 + tau))
                                 {
                                     klase = "w_i>>w_j ciklas";
                                 }
-                                if (r24DevideColumnCycleSuma > (0 + tau))
+                                if (r24DivideColumnCycleSuma > (0 + tau))
                                 {
                                     klase = "w_j>>w_i ciklas";
                                 }
-                                if (r1DevidefollowSuma > tau && r21DevidefollowSuma <= tau && r5 <= tau && r25 <= tau)
+                                if (r1DivideFollowSuma > tau && r21DivideFollowSuma <= tau && r5 <= tau && r25 <= tau)
                                 {
                                     klase = "w_i w_j direct follow";
                                 }
-                                if (r1DevidefollowSuma < tau && r21DevidefollowSuma >= tau && r5 <= tau && r25 <= tau)
+                                if (r1DivideFollowSuma < tau && r21DivideFollowSuma >= tau && r5 <= tau && r25 <= tau)
                                 {
                                     klase = "w_j w_i direct follow";
                                 }
-                                if (r2DevideeventuallyFollowsSuma > tau && r1DevidefollowSuma <= tau)
+                                if (r2DivideeventuallyFollowsSuma > tau && r1DivideFollowSuma <= tau)
                                 {
                                     klase = "w_i w_j eventually follow";
                                 }
-                                if (r22DevideeventuallyFollowsSuma > tau && r21DevidefollowSuma <= tau)
+                                if (r22DivideeventuallyFollowsSuma > tau && r21DivideFollowSuma <= tau)
                                 {
                                     klase = "w_j w_i eventually follow";
                                 }
 
 
+                                //jei priskirta daugiau nei viena klase, panaikinam neleidziamas poras
+                                IstrinkNeleidziamasKlasiuPoras(klases);
+
                                 file.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}",
                                      matrixElement.Column,
                                      matrixElement.Row,
-                                     r1DevidefollowSuma,
-                                     r2DevideeventuallyFollowsSuma,
-                                     r3DevidecycleCountSuma,
-                                     r4DevideColumnCycleSuma,
+                                     r1DivideFollowSuma,
+                                     r2DivideeventuallyFollowsSuma,
+                                     r3DividecycleCountSuma,
+                                     r4DivideColumnCycleSuma,
                                      r5,
-                                     r21DevidefollowSuma,
-                                     r22DevideeventuallyFollowsSuma,
-                                     r23DevidecycleCountSuma,
-                                     r24DevideColumnCycleSuma,
+                                     r21DivideFollowSuma,
+                                     r22DivideeventuallyFollowsSuma,
+                                     r23DividecycleCountSuma,
+                                     r24DivideColumnCycleSuma,
                                      r25,
-                                     klase);
+                                     String.Join(",", klases));
 
                                 done.Add(pair);
                                 done.Add(pair2);
@@ -389,6 +395,45 @@ namespace XESApdorojimas
 
             }
 
+        }
+
+        private static void IstrinkNeleidziamasKlasiuPoras(List<string> klases)
+        {
+            if (klases.Count > 1)
+            {
+
+
+                //iteruojam pro priskirtas klases
+                var found = false;
+                for (var k = 0; k < klases.Count; k++)
+                {
+
+                    //ieskom leidziamu klasiu porininkiu
+                    var wijIdx = klases.IndexOf("w_j_ciklas");
+                    var wjiIdx = klases.IndexOf("w_j_ciklas");
+                    var WJIIdx = klases.IndexOf("w_i>>w_j ciklas");
+                    var WIJIdx = klases.IndexOf("w_j>>w_i ciklas");
+
+                    //jei leidziama pora, nedarom nieko
+                    if (wijIdx == k || wjiIdx == k || WJIIdx == k || WIJIdx == k)
+                    {
+                        continue;
+                    }
+                    //jei pirma karta surandam betokia kita pora, nedarom nieko
+                    if (!found)
+                    {
+                        found = true;
+                        continue;
+                    }
+                    //jei jau buvo paprapsta klase ir priskirta klase nera galima, istrinam
+                    else
+                    {
+                        klases.RemoveAt(k);
+                        k--;
+                    }
+                }
+
+            }
         }
 
         private static double PatikrinkArDalmuosNulis(double dalmuo, double naujaReiksme)
@@ -580,6 +625,22 @@ namespace XESApdorojimas
             Console.WriteLine("Iveskite betkoki simboli...");
             Console.ReadKey();
         }
+    }
+
+    public static class  Extensions{
+
+        public static double MakeZeroIfNan(this double number)
+        {
+            if (double.IsNaN(number))
+            {
+                return 0;
+            }
+            else
+            {
+                return number;
+            }
+        }
+
     }
 
 }
