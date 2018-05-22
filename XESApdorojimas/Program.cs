@@ -177,9 +177,9 @@ namespace XESApdorojimas
                 using (System.IO.StreamWriter file =
                 new System.IO.StreamWriter(Environment.CurrentDirectory + @"\InputTinklui.csv", false))
                 {
-                    file.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",
+                    file.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}",
                                  "Veikla1", "Veikla2",
-                               "r1", "r2", "r3", "r4", "r5", "r21", "r22", "r23", "r24", "r25");
+                               "r1", "r2", "r3", "r4", "r5", "r21", "r22", "r23", "r24", "r25","class");
                     int EgzemplioriuSkaiciusLaikinas = unikalusEgzemplioriai.Count();
                     double EgzemplioriuSkaicius = Convert.ToDouble(EgzemplioriuSkaiciusLaikinas);
                     List<string> done = new List<string>();
@@ -208,68 +208,161 @@ namespace XESApdorojimas
                                 double ColumnCycleSuma = matrixElement.ColumnCycling + matrixElementInverse.ColumnCycling;
                                 double CorrelationSuma = matrixElement.OccuredRow + matrixElementInverse.OccuredColumn;
 
-                                
-                                Console.WriteLine("{0}",matrixElement.OccuredColumn);
+
+                                Console.WriteLine("{0}", matrixElement.OccuredColumn);
                                 Console.WriteLine("{0}", matrixElement.OccuredRow);
 
                                 double r1 = Convert.ToDouble(matrixElement.Follows);
                                 double r2 = Convert.ToDouble(matrixElement.EventuallyFollows);
                                 double r3 = Convert.ToDouble(matrixElement.CycleCount);
                                 double r4 = Convert.ToDouble(matrixElement.ColumnCycling);
-                                double r5 = Convert.ToDouble(matrixElement.Correlation);
+                                double R5 = Convert.ToDouble(matrixElement.Correlation);
                                 double r21 = Convert.ToDouble(matrixElementInverse.Follows);
                                 double r22 = Convert.ToDouble(matrixElementInverse.EventuallyFollows);
                                 double r23 = Convert.ToDouble(matrixElementInverse.CycleCount);
                                 double r24 = Convert.ToDouble(matrixElementInverse.ColumnCycling);
-                                double r25 = Convert.ToDouble(matrixElementInverse.Correlation);
+                                double R25 = Convert.ToDouble(matrixElementInverse.Correlation);
 
-                                double r5Column = Convert.ToDouble(matrixElement.OccuredColumn);
-                                double r5Row = Convert.ToDouble(matrixElement.OccuredRow);
-
-                                //double r25C = Convert.ToDouble(matrixElement.OccuredColumn);
-                                // double r25R = Convert.ToDouble(matrixElement.OccuredRow);
-
-
-                                double abr5 = r5 / r5Column / r5Row;
-                                double abr25 = r25 / r5Column / r5Row;
-
-                               
-
-
-                                //file.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",
-                                //     matrixElement.Column,
-                                //     matrixElement.Row,
-                                //     matrixElement.Follows / EgzemplioriuSkaicius,
-                                //     matrixElement.EventuallyFollows / EgzemplioriuSkaicius,
-                                //     matrixElement.CycleCount / EgzemplioriuSkaicius,
-                                //     matrixElement.ColumnCycling / EgzemplioriuSkaicius,
-                                //     matrixElement.Correlation / EgzemplioriuSkaicius,
-                                //     matrixElementInverse.Follows / EgzemplioriuSkaicius,
-                                //     matrixElementInverse.EventuallyFollows / EgzemplioriuSkaicius,
-                                //     matrixElementInverse.CycleCount / EgzemplioriuSkaicius,
-                                //     matrixElementInverse.ColumnCycling / EgzemplioriuSkaicius,
-                                //     matrixElementInverse.Correlation / EgzemplioriuSkaicius);
 
 
                                 var _r1 = r1 / followsSuma;
                                 var _r21 = r21 / followsSuma;
 
-                                file.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",
+                                double r1DevidefollowSuma = r1 / followsSuma;
+                                double r2DevideeventuallyFollowsSuma = r2 / eventuallyFollowsSuma;
+                                double r3DevidecycleCountSuma = r3 / cycleCountSuma;
+                                double r4DevideColumnCycleSuma = r4 / ColumnCycleSuma;
+                                double r5 = matrixElement.OccuredColumn / EgzemplioriuSkaicius * R5 / matrixElement.OccuredColumn;
+
+                                double r21DevidefollowSuma = r21 / followsSuma;
+                                double r22DevideeventuallyFollowsSuma = r22 / eventuallyFollowsSuma;
+                                double r23DevidecycleCountSuma = r23 / cycleCountSuma;
+                                double r24DevideColumnCycleSuma = r24 / ColumnCycleSuma;
+                                double r25 = matrixElementInverse.OccuredColumn / EgzemplioriuSkaicius;
+
+                                //PatikrinkArDalmuosNulis(r1, r1DevidefollowSuma);
+                                //PatikrinkArDalmuosNulis(r2, r2DevideeventuallyFollowsSuma);
+                                //PatikrinkArDalmuosNulis(r3, r3DevidecycleCountSuma);
+                                //PatikrinkArDalmuosNulis(r4, r4DevideeventuallyFollowsSuma);
+                                //PatikrinkArDalmuosNulis(r5, r5DevideeventuallyFollowsSuma);
+                                //PatikrinkArDalmuosNulis(r21, r21DevidefollowSuma);
+                                //PatikrinkArDalmuosNulis(r22, r22DevideeventuallyFollowsSuma);
+                                //PatikrinkArDalmuosNulis(r23, r23DevidecycleCountSuma);
+                                //PatikrinkArDalmuosNulis(r24, r24DevideeventuallyFollowsSuma);
+                                //PatikrinkArDalmuosNulis(r25, r25DevideeventuallyFollowsSuma);
+
+
+
+                                if (r1 == 0)
+                                {
+                                    r1DevidefollowSuma = 0;
+                                }
+                                if (r21 == 0)
+                                {
+                                    r21DevidefollowSuma = 0;
+                                }
+                                if (r2 == 0)
+                                {
+                                    r2DevideeventuallyFollowsSuma = 0;
+                                }
+                                if (r22 == 0)
+                                {
+                                    r22DevideeventuallyFollowsSuma = 0;
+                                }
+                                if (r3 == 0)
+                                {
+                                    r3DevidecycleCountSuma = 0;
+                                }
+                                if (r23 == 0)
+                                {
+                                    r23DevidecycleCountSuma = 0;
+                                }
+                                if (r4 == 0)
+                                {
+                                    r4DevideColumnCycleSuma = 0;
+                                }
+                                if (r24 == 0)
+                                {
+                                    r24DevideColumnCycleSuma = 0;
+                                }
+                                if (r5 == 0)
+                                {
+                                    r5 = 0;
+                                }
+                                if (r25 == 0)
+                                {
+                                    r25 = 0;
+                                }
+
+
+                                double tau = 0.2;
+                                string klase = " ";
+                                if ((r1DevidefollowSuma + r21DevidefollowSuma) > (1 - tau) && (r5 + r25) < (0+tau))
+                                {
+                                    klase = "AND";
+                                }
+                                if ((r1DevidefollowSuma + r21DevidefollowSuma) < (0 + tau) && (r5 + r25) > (1 - tau))
+                                {
+                                    klase = "OR";
+                                }
+                                if ( (0 + tau) < (r1DevidefollowSuma + r21DevidefollowSuma) && (r1DevidefollowSuma + r21DevidefollowSuma) < (1 - tau) && (0+tau)<(r5 + r25) && (r5 + r25) < (1 - tau))
+                                {
+                                    klase = "XOR";
+                                }
+                                if (r3DevidecycleCountSuma > (0 + tau))
+                                {
+                                    klase = "w_i_ciklas";
+                                }
+                                if (r23DevidecycleCountSuma > (0 + tau))
+                                {
+                                    klase = "w_j_ciklas";
+                                }
+                                if (r4DevideColumnCycleSuma > (0 + tau))
+                                {
+                                    klase = "w_i>>w_j ciklas";
+                                }
+                                if (r24DevideColumnCycleSuma > (0 + tau))
+                                {
+                                    klase = "w_j>>w_i ciklas";
+                                }
+                                if (r1DevidefollowSuma > tau && r21DevidefollowSuma <= tau && r5 <= tau && r25 <= tau)
+                                {
+                                    klase = "w_i w_j direct follow";
+                                }
+                                if (r1DevidefollowSuma < tau && r21DevidefollowSuma >= tau && r5 <= tau && r25 <= tau)
+                                {
+                                    klase = "w_j w_i direct follow";
+                                }
+                                if (r2DevideeventuallyFollowsSuma > tau && r1DevidefollowSuma <= tau)
+                                {
+                                    klase = "w_i w_j eventually follow";
+                                }
+                                if (r22DevideeventuallyFollowsSuma > tau && r21DevidefollowSuma <= tau)
+                                {
+                                    klase = "w_j w_i eventually follow";
+                                }
+
+
+                                file.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}",
                                      matrixElement.Column,
                                      matrixElement.Row,
-                                     r1 / followsSuma,
-                                     r2 / eventuallyFollowsSuma,
-                                     r3 / cycleCountSuma,
-                                     r4 / ColumnCycleSuma,
-                                     abr5,
-                                     r21 / followsSuma,
-                                     r22 / eventuallyFollowsSuma,
-                                     r23 / cycleCountSuma,
-                                     r24 / ColumnCycleSuma,
-                                     abr25);
+                                     r1DevidefollowSuma,
+                                     r2DevideeventuallyFollowsSuma,
+                                     r3DevidecycleCountSuma,
+                                     r4DevideColumnCycleSuma,
+                                     r5,
+                                     r21DevidefollowSuma,
+                                     r22DevideeventuallyFollowsSuma,
+                                     r23DevidecycleCountSuma,
+                                     r24DevideColumnCycleSuma,
+                                     r25,
+                                     klase);
 
                                 done.Add(pair);
                                 done.Add(pair2);
+
+
+
                             }
                             //file.WriteLine("\r\n\r\n");
                         }
@@ -295,6 +388,16 @@ namespace XESApdorojimas
 
 
             }
+
+        }
+
+        private static double PatikrinkArDalmuosNulis(double dalmuo, double naujaReiksme)
+        {
+            if (dalmuo == 0)
+            {
+                naujaReiksme = 0;
+            }
+            return naujaReiksme;
 
         }
 
